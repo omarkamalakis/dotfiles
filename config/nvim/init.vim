@@ -7,7 +7,7 @@ source $HOME/.config/nvim/startifyrc.vim
 "=====================
 call plug#begin('~/.config/nvim/plugged')
 "File Navigation
-Plug 'scrooloose/nerdtree'
+Plug 'lambdalisue/fern.vim'
 
 "Task/Project Management + Knowledge Base
 Plug 'vimwiki/vimwiki'
@@ -34,6 +34,8 @@ Plug 'wellle/context.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mattn/emmet-vim'
 Plug 'cespare/vim-toml'
+Plug 'pearofducks/ansible-vim'
+Plug 'tmsvg/pear-tree'
 
 "Productivity
 Plug 'tpope/vim-obsession'
@@ -75,6 +77,8 @@ let g:seiya_target_groups = has('nvim') ? ['guibg'] : ['ctermbg']
 let g:airline_powerline_fonts=1
 let g:airline_extensions = ['coc', 'vista']
 
+
+set guifont=Fura\ Code\ Retina:h12
 "=====================
 "GENERAL SETTINGS
 "=====================
@@ -99,10 +103,17 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 "=====================
 "Quality of Life Keybinds:
 "=====================
+" Buffer Switching
+map <leader>; :bnext
+
 " Easymotion
 nmap <leader>d <Plug>(easymotion-overwin-f)
 let g:EasyMotion_smartcase = 1
 
+map f <Plug>(easymotion-fl)
+map F <Plug>(easymotion-Fl)
+map t <Plug>(easymotion-tl)
+map T <Plug>(easymotion-Tl)
 map <leader>j <Plug>(easymotion-j)
 map <leader>k <Plug>(easymotion-k)
 
@@ -225,15 +236,18 @@ let g:calendar_options = 'nornu'
 
 "For Bash and System Configs
 
+" Ansible Playbooks
+	au BufRead,BufNewFile */playbooks/*.yml set filetype=yaml.ansible
+
 " When shortcut files are updated, renew bash and ranger configs with new material:
 	autocmd BufWritePost ~/.bmdirs,~/.bmfiles !shortcuts
 
 " Run xrdb whenever Xdefaults or Xresources are updated.
 	autocmd BufWritePost ~/.Xresources,~/.Xdefaults !xrdb %
 
-" Nerd tree
-	map <C-n> :NERDTreeToggle<CR>
-	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" Fern
+	map <C-n> :Fern . -drawer -toggle<cr>
+	let g:fern#disable_default_mappings
 
 " Vista
 nnoremap <leader>v :Vista!!<CR>
